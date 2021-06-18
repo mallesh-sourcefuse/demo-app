@@ -1,0 +1,10 @@
+{
+  "ids": {
+    "User": 3
+  },
+  "models": {
+    "User": {
+      "2": "{\"id\":2,\"name\":\"Mallesh\",\"role\":\"Developer\"}"
+    }
+  }
+}
