@@ -1,6 +1,8 @@
 import {ApplicationConfig, TrainingAppApplication} from './application';
 
 export * from './application';
+import * as dotenv from 'dotenv';
+
 
 export async function main(options: ApplicationConfig = {}) {
   const app = new TrainingAppApplication(options);
@@ -16,6 +18,8 @@ export async function main(options: ApplicationConfig = {}) {
 
 if (require.main === module) {
   // Run the application
+  dotenv.config({path:'.env'});
+
   const config = {
     rest: {
       port: +(process.env.PORT ?? 3000),
@@ -29,6 +33,13 @@ if (require.main === module) {
       openApiSpec: {
         // useful when used with OpenAPI-to-GraphQL to locate your application
         setServersFromRequest: true,
+      },
+      cors: {
+        origin: process.env.ALLOWED_ORIGIN ?? '*',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+        credentials: true,
       },
     },
   };
