@@ -1,10 +1,17 @@
-import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where,} from '@loopback/repository';
-import {del, get, getModelSchemaRef, param, patch, post, put, requestBody, response,} from '@loopback/rest';
+import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where, } from '@loopback/repository';
+import {del, get, getModelSchemaRef, param, patch, post, put, requestBody, response, } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 import {authenticate} from "@loopback/authentication";
 
-@authenticate('jwt')
+
+
+export interface Creds {
+    email: string;
+    password: string;
+}
+
+// @authenticate('jwt')
 export class UserController {
     constructor(
         @repository(UserRepository)
@@ -28,7 +35,7 @@ export class UserController {
                 },
             },
         })
-            user: Omit<User, 'id'>,
+        user: Omit<User, 'id'>,
     ): Promise<User> {
         return this.userRepository.create(user);
     }
@@ -75,7 +82,7 @@ export class UserController {
                 },
             },
         })
-            user: User,
+        user: User,
         @param.where(User) where?: Where<User>,
     ): Promise<Count> {
         return this.userRepository.updateAll(user, where);
@@ -110,7 +117,7 @@ export class UserController {
                 },
             },
         })
-            user: User,
+        user: User,
     ): Promise<void> {
         await this.userRepository.updateById(id, user);
     }

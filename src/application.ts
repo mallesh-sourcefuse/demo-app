@@ -1,14 +1,21 @@
+import {AuthenticationComponent} from '@loopback/authentication';
+import {JWTAuthenticationComponent, UserServiceBindings} from '@loopback/authentication-jwt';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
-import {RestExplorerBindings, RestExplorerComponent,} from '@loopback/rest-explorer';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
+import {RestExplorerBindings, RestExplorerComponent} from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
-import {MySequence} from './sequence';
-import {AuthenticationComponent} from '@loopback/authentication';
-import {JWTAuthenticationComponent, MyUserService, UserServiceBindings,} from '@loopback/authentication-jwt';
 import {DbDataSource} from './datasources';
+import {LoggerBindings, PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants, UserBindings} from './keys';
+import {LoggerProvider} from './providers/logger.provider';
+import {MySequence} from './sequence';
+import {JWTService} from './services/jwt.service';
+import {PasswordHasher} from './services/password.hasher';
+import {MyUserService} from './services/user.service';
+
+
 
 export {ApplicationConfig};
 
@@ -34,8 +41,8 @@ export class TrainingAppApplication extends BootMixin(
         this.component(JWTAuthenticationComponent);
 
         this.dataSource(DbDataSource, UserServiceBindings.DATASOURCE_NAME);
-        this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
-
+        // this.bind(LoggerBindings.LOGGER).toProvider(LoggerProvider);
+        this.setupBinding();
         this.projectRoot = __dirname;
         // Customize @loopback/boot Booter Conventions here
         this.bootOptions = {
@@ -46,5 +53,16 @@ export class TrainingAppApplication extends BootMixin(
                 nested: true,
             },
         };
+
+    }
+    setupBinding() {
+        console.log("dtaa binding")
+        this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(PasswordHasher);
+        this.bind(PasswordHasherBindings.HASHING_ROUNDS).to(10);
+        this.bind(UserBindings.USER_SERVICE).toClass(MyUserService);
+        this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JWTService);
+        this.bind(TokenServiceBindings.TOKEN_SECRET).to(TokenServiceConstants.TOKEN_SECRET_VALUE);
+        this.bind(TokenServiceBindings.TOKEN_EXPIRE_IN).to(TokenServiceConstants.TOKEN_EXPIRE_IN_VALUE);
+        this.bind(LoggerBindings.LOGGER).toProvider(LoggerProvider);
     }
 }
