@@ -1,10 +1,11 @@
 {
   "ids": {
-    "User": 3
+    "User": 4
   },
   "models": {
     "User": {
-      "2": "{\"id\":2,\"name\":\"Mallesh\",\"role\":\"Developer\"}"
+      "2": "{\"id\":2,\"name\":\"Mallesh\",\"role\":\"Developer\"}",
+      "3": "{\"name\":\"Mallesh D\",\"email\":\"mallesh@gmail.com\",\"password\":\"$2b$10$Nl84LlcnWRwf8k.rCDvseO6x85/0rjvtbH4keXFRyrrth3h4OF99i\",\"role\":\"Admin\",\"id\":3}"
     }
   }
 }

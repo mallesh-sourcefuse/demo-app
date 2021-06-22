@@ -11,7 +11,7 @@ export interface Creds {
     password: string;
 }
 
-// @authenticate('jwt')
+@authenticate('jwt')
 export class UserController {
     constructor(
         @repository(UserRepository)
