@@ -18,7 +18,7 @@ export async function main(options: ApplicationConfig = {}) {
 
 if (require.main === module) {
   // Run the application
-  dotenv.config({path:'.env'});
+  dotenv.config({path: '.env'});
 
   const config = {
     rest: {
@@ -34,13 +34,13 @@ if (require.main === module) {
         // useful when used with OpenAPI-to-GraphQL to locate your application
         setServersFromRequest: true,
       },
-      cors: {
-        origin: process.env.ALLOWED_ORIGIN ?? '*',
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-        preflightContinue: false,
-        optionsSuccessStatus: 204,
-        credentials: true,
-      },
+      // cors: {
+      //   origin: process.env.ALLOWED_ORIGIN ?? '*',
+      //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      //   preflightContinue: false,
+      //   optionsSuccessStatus: 204,
+      //   credentials: true,
+      // },
     },
   };
   main(config).catch(err => {
