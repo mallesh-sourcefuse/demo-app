@@ -1,7 +1,7 @@
 import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where, } from '@loopback/repository';
 import {del, get, getModelSchemaRef, param, patch, put, response, } from '@loopback/rest';
 import {inject} from '@loopback/context';
-import {User} from '../models';
+import {Cred, User} from '../models';
 import {UserRepository} from '../repositories';
 import {JWTService} from '../services/jwt.service';
 import {PasswordHasher} from '../services/password.hasher';
@@ -44,10 +44,8 @@ export class AuthController {
   }
 
   @post('/login')
-  async login(@requestBody() creds: Creds) {
+  async login(@requestBody() creds: Cred) {
     validate(creds);
-    console.log(this.userService, "user service");
-
     const user = await this.userService.verifyCredentials(creds);
     const token = await this.jwtService.generateToken(user);
     return {token}
