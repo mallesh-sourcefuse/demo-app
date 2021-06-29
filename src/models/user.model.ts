@@ -1,6 +1,20 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, belongsTo, model, property} from '@loopback/repository';
 
-@model()
+import {Role} from '.';
+@model(
+  {
+    settings: {
+      foreignKeys: {
+        fk_user_role: {
+          name: 'fk_user_role',
+          entity: 'Role',
+          entityKey: 'role_id',
+          foreignKey: 'role',
+        }
+      },
+    }
+  }
+)
 export class User extends Entity {
   @property({
     type: 'string',
@@ -27,11 +41,10 @@ export class User extends Entity {
   })
   password: string;
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  role: string;
+
+
+  @belongsTo(() => Role, {keyTo: 'role_id', name: 'user_role'})
+  role: number;
 
 
   constructor(data?: Partial<User>) {

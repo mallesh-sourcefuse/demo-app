@@ -1,9 +1,11 @@
-import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where, } from '@loopback/repository';
+import {Count, CountSchema, Filter, Getter, FilterExcludingWhere, repository, Where, } from '@loopback/repository';
 import {del, get, getModelSchemaRef, param, patch, post, put, requestBody, response, } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
-import {authenticate} from "@loopback/authentication";
+import {authenticate, AuthenticationBindings, STRATEGY} from 'loopback4-authentication';
+import {authorize} from 'loopback4-authorization';
 
+import {inject} from '@loopback/core';
 
 
 export interface Creds {
@@ -11,11 +13,13 @@ export interface Creds {
     password: string;
 }
 
-@authenticate('jwt')
+// @authenticate('jwt')
 export class UserController {
     constructor(
         @repository(UserRepository)
         public userRepository: UserRepository,
+        @inject.getter(AuthenticationBindings.CURRENT_USER)
+        private readonly getCurrentUser: Getter<User>,
     ) {
     }
 
@@ -51,6 +55,8 @@ export class UserController {
         return this.userRepository.count(where);
     }
 
+    @authenticate('jwt')
+    @authorize({permissions: []})
     @get('/users')
     @response(200, {
         description: 'Array of User model instances',
