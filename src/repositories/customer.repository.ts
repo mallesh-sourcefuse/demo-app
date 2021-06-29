@@ -1,8 +1,7 @@
-import {Getter, inject} from '@loopback/core';
-import {BelongsToAccessor, DefaultCrudRepository, repository} from '@loopback/repository';
+import {inject} from '@loopback/core';
+import {DefaultCrudRepository, } from '@loopback/repository';
 import {DbDataSource} from '../datasources';
 import {Customer, CustomerRelations, User} from '../models';
-import {UserRepository} from './user.repository';
 
 export class CustomerRepository extends DefaultCrudRepository<
   Customer,
