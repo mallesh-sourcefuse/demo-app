@@ -60,6 +60,7 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "isemail": "^3.2.0",
+    "loopback-connector-postgresql": "^5.4.0",
     "loopback4-authentication": "^4.5.2",
     "loopback4-authorization": "^3.3.0",
     "loopback4-soft-delete": "^3.2.0",
