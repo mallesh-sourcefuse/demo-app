@@ -15,6 +15,7 @@ export class JWTService {
   private readonly expireIn: string;
 
   async generateToken(user: User | any): Promise<string> {
+    console.log('generating Token')
     const token = jwt.sign({id: user.id, name: user.name}, this.secret, {expiresIn: this.expireIn});
     return token;
   }
@@ -22,6 +23,7 @@ export class JWTService {
   async verifyToken(token: string): Promise<UserProfile> {
     let userProfile: UserProfile;
     try {
+      console.log('verify Token')
       const decoded = jwt.verify(token, this.secret);
       userProfile = Object.assign({name: '', id: ''}, {
         id: decoded.id, name: decoded.name, [securityId]: decoded.id

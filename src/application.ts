@@ -14,7 +14,10 @@ import {MySequence} from './sequence';
 import {JWTService} from './services/jwt.service';
 import {PasswordHasher} from './services/password.hasher';
 import {MyUserService} from './services/user.service';
-
+import {
+    AuthorizationBindings,
+    AuthorizationComponent
+} from 'loopback4-authorization';
 
 
 export {ApplicationConfig};
@@ -53,6 +56,10 @@ export class TrainingAppApplication extends BootMixin(
                 nested: true,
             },
         };
+        this.bind(AuthorizationBindings.CONFIG).to({
+            allowAlwaysPaths: ['/explorer'],
+        });
+        this.component(AuthorizationComponent);
 
     }
     setupBinding() {

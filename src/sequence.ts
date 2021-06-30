@@ -1,7 +1,15 @@
 import {AuthenticateFn, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/context';
-import {FindRoute, InvokeMethod, InvokeMiddleware, ParseParams, Reject, RequestContext, Send, SequenceActions, SequenceHandler} from '@loopback/rest';
+import {Getter} from '@loopback/core';
+import {FindRoute, HttpErrors, InvokeMethod, InvokeMiddleware, ParseParams, Reject, RequestContext, Send, SequenceActions, SequenceHandler} from '@loopback/rest';
+import {
+  AuthorizationBindings,
+  AuthorizeErrorKeys,
+  AuthorizeFn,
+  UserPermissionsFn
+} from 'loopback4-authorization';
 import {LoggerBindings} from './keys';
+import {User} from './models';
 import {ILogger} from './providers/logger.provider';
 
 export class MySequence implements SequenceHandler {
@@ -15,8 +23,15 @@ export class MySequence implements SequenceHandler {
     protected invoke: InvokeMethod,
     @inject(SequenceActions.SEND) public send: Send,
     @inject(SequenceActions.REJECT) public reject: Reject,
+
     @inject(AuthenticationBindings.AUTH_ACTION)
-    private authenticate: AuthenticateFn
+    protected authenticateRequest: AuthenticateFn,
+    @inject.getter(AuthenticationBindings.CURRENT_USER)
+    private readonly getCurrentUser: Getter<User>,
+    @inject(AuthorizationBindings.AUTHORIZE_ACTION)
+    protected checkAuthorisation: AuthorizeFn,
+    @inject(AuthorizationBindings.USER_PERMISSIONS)
+    private readonly getUserPermissions: UserPermissionsFn<string>,
   ) {
   }
   async handle(context: RequestContext): Promise<void> {
@@ -27,7 +42,6 @@ export class MySequence implements SequenceHandler {
       Request Details
       Referer = ${request.headers.referer}
       User-Agent = ${request.headers['user-agent']}`)
-
       const allowedOrigin: string[] = (process.env.ALLOWED_ORIGIN ?? '')
         .split(',')
         .map(origin => origin.trim());
@@ -39,9 +53,19 @@ export class MySequence implements SequenceHandler {
       if (finished) {
         return;
       }
+
       const route = this.findRoute(request);
       const args = await this.parseParams(request, route);
-      await this.authenticate(request);
+      const authenticatedUser = await this.authenticateRequest(request);
+      const isAccessAllowed: boolean = await this.checkAuthorisation(
+        authenticatedUser && authenticatedUser.permissions,
+        request,
+      );
+      console.log(isAccessAllowed)
+      if (authenticatedUser != undefined && !isAccessAllowed) {
+        throw new HttpErrors.Forbidden(AuthorizeErrorKeys.NotAllowedAccess);
+      }
+
       const result = await this.invoke(route, args);
       this.send(response, result);
       this.logger.logInfo(`Request end time:- ${new Date().toISOString()}`)

@@ -60,6 +60,8 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "isemail": "^3.2.0",
+    "loopback4-authentication": "^4.5.2",
+    "loopback4-authorization": "^3.3.0",
     "ts-node": "^10.0.0",
     "tslib": "^2.0.0",
     "winston": "^3.3.3"
