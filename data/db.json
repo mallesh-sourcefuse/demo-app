@@ -1,11 +1,13 @@
 {
   "ids": {
-    "User": 4
+    "User": 6
   },
   "models": {
     "User": {
       "2": "{\"id\":2,\"name\":\"Mallesh\",\"role\":\"Developer\"}",
-      "3": "{\"name\":\"Mallesh D\",\"email\":\"mallesh@gmail.com\",\"password\":\"$2b$10$Nl84LlcnWRwf8k.rCDvseO6x85/0rjvtbH4keXFRyrrth3h4OF99i\",\"role\":\"Admin\",\"id\":3}"
+      "3": "{\"name\":\"Mallesh D\",\"email\":\"mallesh@gmail.com\",\"password\":\"$2b$10$Nl84LlcnWRwf8k.rCDvseO6x85/0rjvtbH4keXFRyrrth3h4OF99i\",\"role\":\"Admin\",\"id\":3}",
+      "4": "{\"deleted\":true,\"name\":\"Mallesh\",\"email\":\"mallesh@gmail.com\",\"password\":\"12121212\",\"id\":4,\"deletedOn\":\"2021-06-30T13:48:18.024Z\"}",
+      "5": "{\"deleted\":false,\"name\":\"Mallesh\",\"email\":\"mallesh@gmail.com\",\"password\":\"12121212\",\"id\":5}"
     }
   }
 }
