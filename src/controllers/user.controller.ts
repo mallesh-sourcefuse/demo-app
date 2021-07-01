@@ -4,6 +4,7 @@ import {User} from '../models';
 import {UserRepository} from '../repositories';
 import {authenticate, AuthenticationBindings, STRATEGY} from 'loopback4-authentication';
 import {authorize} from 'loopback4-authorization';
+import {PermissionKey} from '../services/permissions.keys'
 
 import {inject} from '@loopback/core';
 
@@ -56,7 +57,7 @@ export class UserController {
     }
 
     @authenticate('jwt')
-    @authorize({permissions: []})
+    @authorize({permissions: [PermissionKey.ViewAnyUser]})
     @get('/users')
     @response(200, {
         description: 'Array of User model instances',
