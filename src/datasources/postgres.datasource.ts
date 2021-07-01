@@ -23,11 +23,11 @@ const config = {
 @lifeCycleObserver('datasource')
 export class PostgresDsDataSource extends juggler.DataSource
   implements LifeCycleObserver {
-  static dataSourceName = 'postgresDs';
+  static dataSourceName = 'postgres';
   static readonly defaultConfig = config;
 
   constructor(
-    @inject('datasources.config.postgresDs', {optional: true})
+    @inject('datasources.config.postgres', {optional: true})
     dsConfig: object = config,
   ) {
     super(dsConfig);
