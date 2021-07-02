@@ -31,7 +31,7 @@ export class MyUserService implements UserService<User, Creds>{
     if (!foundUser) {
       throw new HttpErrors.NotFound("User not found");
     }
-
+    console.log(credentials.password, foundUser.password)
     const matched = await this.hasherService.comparePassword(credentials.password, foundUser.password);
     if (!matched) {
       throw new HttpErrors.Unauthorized("Invalid password");

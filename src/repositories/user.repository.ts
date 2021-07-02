@@ -5,6 +5,7 @@ import {SoftCrudRepository} from 'loopback4-soft-delete';
 import {RoleRepository} from './role.repository';
 import {PostgresDsDataSource} from '../datasources';
 import {Role, User, UserRelations} from '../models';
+import * as bcrypt from 'bcrypt';
 
 export class UserRepository extends SoftCrudRepository<
   User,
@@ -32,5 +33,16 @@ export class UserRepository extends SoftCrudRepository<
     );
 
     this.registerInclusionResolver('user_role', this.user_role.inclusionResolver);
+  }
+  private readonly saltRounds = 8;
+
+  async create(entity: DataObject<User>, options?: Options): Promise<User> {
+
+    entity.password = await bcrypt.hash(
+      entity.password ?? '',
+      this.saltRounds,
+    );
+    const user = await super.create(entity, options);
+    return user;
   }
 }
